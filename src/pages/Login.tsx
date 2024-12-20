@@ -14,6 +14,11 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const [login] = useLoginMutation();
 
+  const defaultValues = {
+    userId: 'A-0001',
+    password: 'admin123',
+  };
+
   const onSubmit = async (data: FieldValues) => {
     const toastId = toast.loading('Logging in...');
 
@@ -38,7 +43,7 @@ const Login = () => {
 
   return (
     <Row justify='center' align='middle' style={{ height: '100vh' }}>
-      <UniForm onSubmit={onSubmit}>
+      <UniForm onSubmit={onSubmit} defaultValues={defaultValues}>
         <UniInput type={'text'} name={'userId'} label={'Id: '} />
         <UniInput type='text' name='password' label={'Password: '} />
         <Button htmlType='submit'>Login</Button>
