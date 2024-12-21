@@ -8,6 +8,7 @@ import {
 
 type TFromConfig = {
   defaultValues?: Record<string, any>;
+  resolver?: any;
 };
 
 type TFormProps = {
@@ -15,11 +16,22 @@ type TFormProps = {
   children: React.ReactNode;
 } & TFromConfig;
 
-const UniForm = ({ onSubmit, children, defaultValues }: TFormProps) => {
+const UniForm = ({
+  onSubmit,
+  children,
+  defaultValues,
+  resolver,
+}: TFormProps) => {
   const formConfig: TFromConfig = {};
+
   if (defaultValues) {
     formConfig['defaultValues'] = defaultValues;
   }
+
+  if (resolver) {
+    formConfig['resolver'] = resolver;
+  }
+
   const methods = useForm(formConfig);
 
   return (
