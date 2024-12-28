@@ -5,13 +5,13 @@ import UniSelect from '../../../components/form/UniSelect';
 import { toast } from 'sonner';
 import UniInput from '../../../components/form/UniInput';
 import {
-  useAddRegisteredSemesterMutation,
+  useAddCourseMutation,
   useGetAllCoursesQuery,
 } from '../../../redux/features/admin/courseManagement.api';
 import { TResponse } from '../../../types';
 
 const CreateCourse = () => {
-  const [addSemester] = useAddRegisteredSemesterMutation();
+  const [createCourse] = useAddCourseMutation();
   const { data: courses } = useGetAllCoursesQuery(undefined);
 
   const preRequisiteCoursesOptions = courses?.data?.map((item) => ({
@@ -24,17 +24,21 @@ const CreateCourse = () => {
 
     const courseData = {
       ...data,
+      code: Number(data.code),
+      credits: Number(data.credits),
       isDeleted: false,
-      preRequisiteCourses: data?.preRequisiteCourses?.map((item) => ({
-        course: item,
-        isDeleted: false,
-      })),
+      preRequisiteCourses: data?.preRequisiteCourses
+        ? data?.preRequisiteCourses?.map((item) => ({
+            course: item,
+            isDeleted: false,
+          }))
+        : [],
     };
 
     console.log(courseData);
 
     try {
-      const res = (await addSemester(semesterData)) as TResponse<any>;
+      const res = (await createCourse(courseData)) as TResponse<any>;
       console.log(res);
       if (res.error) {
         toast.error(res.error.data.message, { id: toastId });
