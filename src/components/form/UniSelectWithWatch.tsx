@@ -1,5 +1,7 @@
 import { Form, Select } from 'antd';
-import { Controller } from 'react-hook-form';
+import { useEffect } from 'react';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
+
 type TUniSelectProps = {
   label: string;
   name: string;
@@ -12,15 +14,27 @@ type TUniSelectProps = {
     | undefined;
   disabled?: boolean;
   mode?: 'multiple' | undefined;
+  onValueChange: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const UniSelect = ({
+const UniSelectWithWatch = ({
   label,
   name,
   options,
   disabled,
   mode,
+  onValueChange,
 }: TUniSelectProps) => {
+  const { control } = useFormContext();
+  const inputValue = useWatch({
+    control,
+    name,
+  });
+
+  useEffect(() => {
+    onValueChange(inputValue);
+  }, [inputValue]);
+
   return (
     <Controller
       name={name}
@@ -41,4 +55,4 @@ const UniSelect = ({
   );
 };
 
-export default UniSelect;
+export default UniSelectWithWatch;
