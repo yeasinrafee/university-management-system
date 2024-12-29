@@ -7,7 +7,6 @@ import { TCourse } from '../../../types';
 import { useState } from 'react';
 import UniForm from '../../../components/form/UniForm';
 import UniSelect from '../../../components/form/UniSelect';
-import { useGetAcademicFacultiesQuery } from '../../../redux/features/admin/academicManagement.api';
 import { useGetAllFacultiesQuery } from '../../../redux/features/admin/userManagement.api';
 
 export type TTableData = Pick<TCourse, 'title' | 'prefix' | 'code'>;
