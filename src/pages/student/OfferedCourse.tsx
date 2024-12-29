@@ -1,10 +1,18 @@
 import { Button, Col, Row } from 'antd';
-import { useGetAllOfferedCoursesQuery } from '../../redux/features/student/studentCourseManagement.api';
+import {
+  useEnrolCourseMutation,
+  useGetAllOfferedCoursesQuery,
+} from '../../redux/features/student/studentCourseManagement.api';
+
+type TCourse = {
+  [index: string]: any;
+};
 
 const OfferedCourse = () => {
   const { data: offeredCourseData } = useGetAllOfferedCoursesQuery(undefined);
+  const [enroll] = useEnrolCourseMutation();
 
-  const singleObject = offeredCourseData?.data?.reduce((acc, item) => {
+  const singleObject = offeredCourseData?.data?.reduce((acc: TCourse, item) => {
     const key = item.course.title;
 
     acc[key] = acc[key] || { courseTitle: key, section: [] };
@@ -20,6 +28,18 @@ const OfferedCourse = () => {
   }, {});
 
   const modifiedData = Object.values(singleObject ? singleObject : {});
+
+  const handleEnroll = async (id) => {
+    const enrollData = {
+      offeredCourse: id,
+    };
+    const res = await enroll(enrollData);
+    console.log(res);
+  };
+
+  if (!modifiedData.length) {
+    return <p>No available courses</p>;
+  }
 
   return (
     <Row gutter={[0, 20]}>
@@ -46,7 +66,9 @@ const OfferedCourse = () => {
                     </Col>
                     <Col span={5}>Start Time: {section.startTime}</Col>
                     <Col span={5}>End Time: {section.endTime}</Col>
-                    <Button>Enroll</Button>
+                    <Button onClick={() => handleEnroll(section._id)}>
+                      Enroll
+                    </Button>
                   </Row>
                 );
               })}

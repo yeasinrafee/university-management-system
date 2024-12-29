@@ -11,12 +11,14 @@ const studentCourseApi = baseApi.injectEndpoints({
             params.append(item.name, item.value as string);
           });
         }
+
         return {
           url: '/offered-courses/my-offered-courses',
           method: 'GET',
           params: params,
         };
       },
+      providesTags: ['offeredCourse'],
       transformResponse: (response: TResponseRedux<any>) => {
         return {
           data: response.data,
@@ -24,14 +26,16 @@ const studentCourseApi = baseApi.injectEndpoints({
         };
       },
     }),
-    addAcademicSemester: builder.mutation({
+    enrolCourse: builder.mutation({
       query: (data) => ({
-        url: '/academic-semesters/create-academic-semester',
+        url: '/enrolled-courses/create-enrolled-course',
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['offeredCourse'],
     }),
   }),
 });
 
-export const { useGetAllOfferedCoursesQuery } = studentCourseApi;
+export const { useGetAllOfferedCoursesQuery, useEnrolCourseMutation } =
+  studentCourseApi;
